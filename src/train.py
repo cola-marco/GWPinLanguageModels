@@ -18,6 +18,8 @@ import torch
 
 from model import GPTConfig, GPT
 
+from codecarbon import EmissionsTracker
+
 # -----------------------------------------------------------------------------
 # Experiment configuration
 
@@ -100,6 +102,13 @@ def save_checkpoint(out_dir: str, model: GPT, optimizer: torch.optim.Optimizer, 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     set_seed(SEED)
+    
+    tracker = EmissionsTracker(
+        project_name="gpt_train",
+        output_dir=OUT_DIR,
+        output_file="emissions_train.csv"
+    )
+    tracker.start()
 
     meta = load_meta(DATA_DIR)
     vocab_size = meta["vocab_size"] if meta and "vocab_size" in meta else 50304
@@ -189,6 +198,9 @@ def main():
             "model": asdict(cfg),
         }
         save_checkpoint(OUT_DIR, model, optimizer, MAX_ITERS, config_dump)
+    
+    emissions = tracker.stop()
+    print(f"Estimated CO2 emissions for training: {emissions: } kg CO2eq")
 
 if __name__ == "__main__":
     main()

@@ -11,6 +11,8 @@ import torch
 
 from model import GPT, GPTConfig
 
+from codecarbon import EmissionsTracker
+
 # ----------------------------
 # Edit these
 # ----------------------------
@@ -33,6 +35,13 @@ def load_meta(data_dir: str):
 
 
 def main():
+    tracker = EmissionsTracker(
+        project_name="gpt_inference",
+        output_dir=OUT_DIR,
+        output_file="emissions_prompt.csv"
+    )
+    tracker.start()
+    
     ckpt = torch.load(CKPT_PATH, map_location=DEVICE)
 
     # train.py should store config with model parameters and data_dir
@@ -65,6 +74,9 @@ def main():
     )
 
     print(decode(out[0].tolist()))
+    
+    emissions = tracker.stop()
+    print(f"Inference emissions: {emissions} kg CO2eq")
 
 
 if __name__ == "__main__":
