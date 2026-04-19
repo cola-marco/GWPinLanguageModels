@@ -32,9 +32,9 @@ LOG_INTERVAL = 50
 SAVE_CHECKPOINT = True
 
 # Model (main tunables)
-N_LAYER = 4
+N_LAYER = 8
 N_HEAD = 4
-N_EMBD = 128
+N_EMBD = 256
 DROPOUT = 0.1
 BIAS = True
 
@@ -44,7 +44,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"          # If you can, t
 DTYPE = "float32"       
 BATCH_SIZE = 32         # Number of sequences processed in parallel.
 BLOCK_SIZE = 256        # Maximum context length for predictions (e.g. 128 or 256). The longer the block size, the more memory and compute it requires, but it can also lead to better performance.
-MAX_ITERS = 500        # Total number of training iterations. The more iterations, the better the model can perform, but it also takes more time and energy to train.
+MAX_ITERS = 1000      # Total number of training iterations. The more iterations, the better the model can perform, but it also takes more time and energy to train.
 LEARNING_RATE = 3e-4    # the standard starting learning rate, often good enough for a first try
 WEIGHT_DECAY = 0.1      # L2 Regularization
 GRAD_CLIP = 1.0         # To prevent exploding gradients
